@@ -1,6 +1,8 @@
 package be.vdab.fietsacademy.repositories;
 
+import be.vdab.fietsacademy.domain.Docent;
 import be.vdab.fietsacademy.domain.Geslacht;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -19,8 +25,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(JpaDocentRepository.class)
 public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests
 {
+    private static final String DOCENTEN = "docenten";
+    private Docent docent;
+
     @Autowired
     private JpaDocentRepository repository;
+
+    @Autowired
+    private EntityManager manager;
+
+    @Before
+    public void before()
+    {
+        docent = new Docent("test", "test", BigDecimal.TEN, "test@fietsacademy.be", Geslacht.MAN);
+    }
 
     private long idVanTestMan()
     {
@@ -34,6 +52,7 @@ public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringCo
     public void findById() {
         assertThat(repository.findById(idVanTestMan()).get().getVoornaam()).isEqualTo("testM");
     }
+
     @Test
     public void findByOnbestaandeId() {
         assertThat(repository.findById(-1)).isNotPresent();
@@ -49,5 +68,20 @@ public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringCo
     public void vrouw()
     {
         assertThat(repository.findById(idVanTestVrouw()).get().getGeslacht()).isEqualTo(Geslacht.VROUW);
+    }
+    @Test
+    public void create() {
+        repository.create(docent);
+        assertThat(docent.getId()).isPositive();
+        assertThat(super.countRowsInTableWhere(DOCENTEN, "id=" + docent.getId())).isOne();
+    }
+
+    @Test
+    public void delete()
+    {
+        long id = idVanTestMan();
+        repository.delete(id);
+        manager.flush();
+        assertThat(super.countRowsInTableWhere(DOCENTEN, "id=" + docent.getId())).isZero();
     }
 }

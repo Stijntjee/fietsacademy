@@ -1,4 +1,4 @@
-package be.vdab.fietsacademy;
+package be.vdab.fietsacademy.repositories;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
