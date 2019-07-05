@@ -24,7 +24,8 @@ public class DefaultDocentService implements DocentService
     //METHODS
     @Override
     @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED)
-    public void opslag(long id, BigDecimal percentage) {
+    public void opslag(long id, BigDecimal percentage)
+    {
         Optional<Docent> optionalDocent = docentRepository.findById(id);
         if (optionalDocent.isPresent()) {
             optionalDocent.get().opslag(percentage);

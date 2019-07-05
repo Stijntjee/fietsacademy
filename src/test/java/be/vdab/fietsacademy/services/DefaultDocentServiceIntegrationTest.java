@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Sql("/insertDocent.sql")
-public class DefaultDocentSerivceIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class DefaultDocentServiceIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private DefaultDocentService service;
     @Autowired

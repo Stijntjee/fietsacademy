@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -83,5 +84,22 @@ public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         repository.delete(id);
         manager.flush();
         assertThat(super.countRowsInTableWhere(DOCENTEN, "id=" + docent.getId())).isZero();
+    }
+
+    @Test
+    public void findAll() {
+        assertThat(repository.findAll()).hasSize(super.countRowsInTable(DOCENTEN))
+                .extracting(docent->docent.getWedde()).isSorted();
+    }
+
+    @Test
+    public void findByWeddeBetween()
+    {
+        BigDecimal duizend = BigDecimal.valueOf(1_000);
+        BigDecimal tweeduizend=BigDecimal.valueOf(2_000);
+        List<Docent> docenten = repository.findByWeddeBetween(duizend, tweeduizend);
+
+        assertThat(docenten).hasSize(super.countRowsInTableWhere(DOCENTEN, "wedde between 1000 and 2000"))
+                .allSatisfy(docent -> assertThat(docent.getWedde()).isBetween(duizend, tweeduizend));
     }
 }

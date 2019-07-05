@@ -11,18 +11,20 @@ import java.math.RoundingMode;
 public class Docent implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //DATABASE VULT DEZE KOLOM IN (id)
     @Id
     private long id;
     private String voornaam;
+    @Column(name = "familienaam") // --> ALS DE VARIABELE ANDERS HEET ALS DE KOLOM
     private String familienaam;
     private BigDecimal wedde;
     private String emailAdres;
     @Enumerated(EnumType.STRING)
     private Geslacht geslacht;
+    //@Transient --> variabele zonder kolom
 
     //CONSTRUCTORS
-    protected Docent()
+    protected Docent()  //ENTITYMANAGER HEEFT DEFAULT CONSTRUCTOR NODIG
     {
     }
 

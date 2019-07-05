@@ -44,6 +44,6 @@ public class DefaultDocentServiceTest
     public void opslagVoorOnbestaandeDocent()
         {
             assertThatExceptionOfType(DocentNietGevondenException.class).isThrownBy(() ->service.opslag(-1,BigDecimal.TEN));
-            verify(repository).findById(1);
+            verify(repository).findById(-1);
         }
     }
