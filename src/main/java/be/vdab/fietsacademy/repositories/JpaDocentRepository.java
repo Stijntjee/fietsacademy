@@ -1,6 +1,7 @@
 package be.vdab.fietsacademy.repositories;
 
 import be.vdab.fietsacademy.domain.Docent;
+import be.vdab.fietsacademy.queryresults.IdEnEmailAdres;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
@@ -50,5 +51,14 @@ public class JpaDocentRepository implements DocentRepository
                .getResultList();
     }
 
+    @Override
+    public List<String> findEmailAdressen() {
+        return manager.createQuery("SELECT d.emailAdres FROM Docent d", String.class).getResultList();
+    }
 
+    @Override
+    public List<IdEnEmailAdres> findIdsEnEmailAdressen()
+    {
+        throw new UnsupportedOperationException();
+    }
 }

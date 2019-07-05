@@ -5,6 +5,7 @@ import be.vdab.fietsacademy.domain.Docent;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import be.vdab.fietsacademy.queryresults.IdEnEmailAdres;
 
 public interface DocentRepository
 {
@@ -13,4 +14,6 @@ public interface DocentRepository
     void delete(long id);
     List<Docent> findAll();
     List<Docent> findByWeddeBetween(BigDecimal van, BigDecimal tot);
+    List<String> findEmailAdressen();
+    List<IdEnEmailAdres> findIdsEnEmailAdressen();
 }

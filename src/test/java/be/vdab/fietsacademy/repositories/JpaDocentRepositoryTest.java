@@ -102,4 +102,16 @@ public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         assertThat(docenten).hasSize(super.countRowsInTableWhere(DOCENTEN, "wedde between 1000 and 2000"))
                 .allSatisfy(docent -> assertThat(docent.getWedde()).isBetween(duizend, tweeduizend));
     }
+
+    @Test
+    public void findByEmailAdressen()
+    {
+        assertThat(repository.findEmailAdressen()).hasSize(super.jdbcTemplate.queryForObject("select count(distinct emailadres) from docenten", Integer.class))
+                .allSatisfy(adres -> assertThat(adres).contains("@"));
+    }
+
+    @Test
+    public void findIdsEnEmailAdressen() {
+        assertThat(repository.findIdsEnEmailAdressen()).hasSize(super.countRowsInTable(DOCENTEN));
+    }
 }
