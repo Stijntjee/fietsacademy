@@ -114,4 +114,32 @@ public class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringCo
     public void findIdsEnEmailAdressen() {
         assertThat(repository.findIdsEnEmailAdressen()).hasSize(super.countRowsInTable(DOCENTEN));
     }
+
+    @Test
+    public void findGrootsteWedde()
+    {
+        assertThat(repository.findGrootsteWedde()).isEqualByComparingTo(
+                super.jdbcTemplate.queryForObject("select max(wedde) from docenten",
+                        BigDecimal.class));
+    }
+    @Test
+    public void findAantalDocentenPerWedde() {
+        BigDecimal duizend = BigDecimal.valueOf(1_000);
+        assertThat(repository.findAantalDocentenPerWedde())
+                .hasSize(super.jdbcTemplate.queryForObject(
+                        "select count(distinct wedde) from docenten", Integer.class))
+                .filteredOn(aantalPerWedde ->
+                        aantalPerWedde.getWedde().compareTo(duizend) == 0)
+                .allSatisfy(aantalPerWedde -> assertThat(aantalPerWedde.getAantal())
+                        .isEqualTo(super.countRowsInTableWhere(DOCENTEN, "wedde = 1000")));
+    }
+    @Test
+    public void algemeneOpslag() {
+        assertThat(repository.algemeneOpslag(BigDecimal.TEN))
+                .isEqualTo(super.countRowsInTable(DOCENTEN));
+        assertThat(super.jdbcTemplate.queryForObject(
+                "select wedde from docenten where id=?", BigDecimal.class,
+                idVanTestMan()))
+                .isEqualByComparingTo("1100");
+    }
 }

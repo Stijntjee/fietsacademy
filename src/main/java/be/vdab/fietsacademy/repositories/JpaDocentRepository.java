@@ -1,6 +1,7 @@
 package be.vdab.fietsacademy.repositories;
 
 import be.vdab.fietsacademy.domain.Docent;
+import be.vdab.fietsacademy.queryresults.AantalDocentenPerWedde;
 import be.vdab.fietsacademy.queryresults.IdEnEmailAdres;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
@@ -45,7 +46,7 @@ public class JpaDocentRepository implements DocentRepository
 
     @Override
     public List<Docent> findByWeddeBetween(BigDecimal van, BigDecimal tot){
-       return manager.createQuery("SELECT d FROM Docent d where d.wedde between :van and :tot", Docent.class)
+       return manager.createNamedQuery("Docent.findByWeddeBetween", Docent.class)
                .setParameter("van", van)
                .setParameter("tot", tot)
                .getResultList();
@@ -60,5 +61,25 @@ public class JpaDocentRepository implements DocentRepository
     public List<IdEnEmailAdres> findIdsEnEmailAdressen()
     {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public BigDecimal findGrootsteWedde() {
+        return  manager.createQuery("select max(d.wedde) from Docent d",BigDecimal.class).getSingleResult();
+    }
+
+    @Override
+    public List<AantalDocentenPerWedde> findAantalDocentenPerWedde() {
+        return manager.createQuery("select new be.vdab.fietsacademy.queryresults.AantalDocentenPerWedde(" + "d.wedde,count(d)) from Docent d group by d.wedde", AantalDocentenPerWedde.class).getResultList();
+
+    }
+
+    @Override
+    public int algemeneOpslag(BigDecimal percentage) {
+       BigDecimal factor = BigDecimal.ONE.add(percentage.divide(BigDecimal.valueOf((100))));
+
+       return manager.createNamedQuery("Docent.algemeneOpslag")
+               .setParameter("factor", factor)
+               .executeUpdate(); //GEEFT AANTAL GEWIJZIGDE UPDATES TERUG IN EEN INT
     }
 }
