@@ -25,9 +25,12 @@ public class Docent implements Serializable
     @Enumerated(EnumType.STRING)
     private Geslacht geslacht;
     @ElementCollection
-    @CollectionTable(name = "docentenbijnemen", joinColumns = @JoinColumn(name = "docentid"))
+    @CollectionTable(name = "docentenbijnamen", joinColumns = @JoinColumn(name = "docentid"))
     @Column(name = "bijnaam")
     private Set<String> bijnamen;
+    /*@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "campusId")
+    private Campus campus;*/
     //@Transient --> variabele zonder kolom
 
     //CONSTRUCTORS
@@ -35,13 +38,14 @@ public class Docent implements Serializable
     {
     }
 
-    public Docent(String voornaam, String familienaam, BigDecimal wedde, String emailAdres, Geslacht geslacht) {
+    public Docent(String voornaam, String familienaam, BigDecimal wedde, String emailAdres, Geslacht geslacht/*, Campus campus*/) {
         this.voornaam = voornaam;
         this.familienaam = familienaam;
         this.wedde = wedde;
         this.emailAdres = emailAdres;
         this.geslacht = geslacht;
         this.bijnamen = new LinkedHashSet<>();
+        //setCampus(campus);
     }
 
     //METHODS
@@ -65,6 +69,21 @@ public class Docent implements Serializable
 
     public boolean removeBijnaam(String bijnaam) {
         return bijnamen.remove(bijnaam);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if ( ! (obj instanceof Docent)) {
+            return false;
+        }
+        if (emailAdres == null) {
+            return false;
+        }
+        return emailAdres.equalsIgnoreCase(((Docent) obj).emailAdres);
+    }
+    @Override
+    public int hashCode() {
+        return emailAdres == null ? 0 : emailAdres.toLowerCase().hashCode();
     }
 
     //GETTERS
@@ -96,4 +115,17 @@ public class Docent implements Serializable
         //return een READ ONLY collection
         return Collections.unmodifiableSet(bijnamen);
     }
+
+    /*public Campus getCampus() {
+        return campus;
+    }
+
+    //SETTERS
+    public void setCampus(Campus campus) {
+        if (campus == null)
+        {
+            throw new NullPointerException();
+        }
+        this.campus = campus;
+    }*/
 }
