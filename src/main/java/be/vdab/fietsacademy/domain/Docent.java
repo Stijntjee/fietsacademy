@@ -96,5 +96,4 @@ public class Docent implements Serializable
         //return een READ ONLY collection
         return Collections.unmodifiableSet(bijnamen);
     }
-
 }

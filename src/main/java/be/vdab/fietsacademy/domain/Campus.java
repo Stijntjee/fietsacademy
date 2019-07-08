@@ -1,8 +1,11 @@
 package be.vdab.fietsacademy.domain;
 
 
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @Table(name = "campussen")
@@ -14,6 +17,10 @@ public class Campus  implements Serializable {
     private String naam;
     @Embedded
     private Adres adres;
+    @ElementCollection
+    @CollectionTable(name = "campussentelefoonnrs", joinColumns = @JoinColumn(name = "campusId"))
+    @OrderBy("fax")
+    private Set<TelefoonNr> telefoonNrs;
 
     //CONSTRUCTORS
     public Campus(String naam, Adres adres) {
@@ -23,6 +30,8 @@ public class Campus  implements Serializable {
 
     protected Campus() {
     }
+
+    //METHODS
 
     //GETTERS
     public long getId() {
@@ -35,5 +44,9 @@ public class Campus  implements Serializable {
 
     public Adres getAdres() {
         return adres;
+    }
+
+    public Set<TelefoonNr> getTelefoonNrs() {
+        return Collections.unmodifiableSet(telefoonNrs);
     }
 }
