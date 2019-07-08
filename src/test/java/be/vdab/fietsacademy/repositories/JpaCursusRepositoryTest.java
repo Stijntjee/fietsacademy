@@ -69,8 +69,7 @@ public class JpaCursusRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         GroepsCursus cursus = new GroepsCursus("testGroep2", EEN_DATUM, EEN_DATUM);
         repository.create(cursus);
         manager.flush();
-        assertThat(super.countRowsInTableWhere(CURSUSSEN,
-                "id='" + cursus.getId() + "'")).isOne();
+
         assertThat(super.countRowsInTableWhere(GROEPS_CURSUSSEN,
                 "id='" + cursus.getId() + "'")).isOne();
 
@@ -80,8 +79,7 @@ public class JpaCursusRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         IndividueleCursus cursus = new IndividueleCursus("testIndividueel2", 7);
         repository.create(cursus);
         manager.flush();
-        assertThat(super.countRowsInTableWhere(CURSUSSEN,
-                "id='" + cursus.getId() + "'")).isOne();
+
         assertThat(super.countRowsInTableWhere(INDIVIDUELE_CURSUSSEN,
                 "id='" + cursus.getId() + "'")).isOne();
     }

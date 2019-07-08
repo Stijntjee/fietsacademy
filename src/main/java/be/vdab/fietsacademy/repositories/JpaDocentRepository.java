@@ -60,7 +60,9 @@ public class JpaDocentRepository implements DocentRepository
     @Override
     public List<IdEnEmailAdres> findIdsEnEmailAdressen()
     {
-        throw new UnsupportedOperationException();
+        return manager.createQuery(
+                "select new be.vdab.fietsacademy.queryresults.IdEnEmailAdres(d.id, d.emailAdres)" +
+                        "from Docent d", IdEnEmailAdres.class).getResultList();
     }
 
     @Override
