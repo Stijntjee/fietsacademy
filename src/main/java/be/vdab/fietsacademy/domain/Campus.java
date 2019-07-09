@@ -85,7 +85,6 @@ public class Campus  implements Serializable {
         return Collections.unmodifiableSet(telefoonNrs);
     }
 
-    //SETTERS
     public Set<Docent> getDocenten()
     {
         return Collections.unmodifiableSet(docenten);
