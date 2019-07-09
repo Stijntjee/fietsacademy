@@ -9,6 +9,11 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@NamedEntityGraph(name = "Docent.metCampus", attributeNodes = @NamedAttributeNode("campus"))
+/*@NamedEntityGraph(name = "Docent.metCampusEnVerantwoordelijkheden", attributeNodes = {@NamedAttributeNode("campus"), @NamedAttributeNode("verantwoordelijkheden")})
+@NamedEntityGraph(name = "Docent.metCampusEnManager", attributeNodes = @NamedAttributeNode(value = "campus", subgraph = "metManager"),
+        subgraphs = @NamedSubgraph(name = "metManager",
+                attributeNodes = @NamedAttributeNode("manager")))*/
 @Entity
 @Table(name = "docenten")
 public class Docent implements Serializable
@@ -34,6 +39,7 @@ public class Docent implements Serializable
     @ManyToMany(mappedBy = "docenten")
     private Set<Verantwoordelijkheid> verantwoordelijkheden = new LinkedHashSet<>();
     //@Transient --> variabele zonder kolom
+
 
     //CONSTRUCTORS
     protected Docent()  //ENTITYMANAGER HEEFT DEFAULT CONSTRUCTOR NODIG
